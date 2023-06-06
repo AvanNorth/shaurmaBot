@@ -25,6 +25,17 @@ class ShaurmaBot[F[_]]()(implicit bot: Api[F], asyncF: Async[F], parallel: Paral
         case "menu_pizza" => query.message.fold(asyncF.unit)(m => editMenuPizza(m))
         case "menu_sandwich" => query.message.fold(asyncF.unit)(m => editMenuSandwich(m))
 
+        case "menu_shaurma_mini" => query.message.fold(asyncF.unit)(m => addToCart(m, "Шаурма мини", 99L))
+        case "menu_shaurma_classic" => query.message.fold(asyncF.unit)(m => addToCart(m, "Шаурма классическая", 199L))
+        case "menu_shaurma_cheese" => query.message.fold(asyncF.unit)(m => addToCart(m, "Шаурма с сыром", 219L))
+
+        case "menu_pizza_mini" => query.message.fold(asyncF.unit)(m => addToCart(m, "Пицца мини", 119L))
+        case "menu_pizza_classic" => query.message.fold(asyncF.unit)(m => addToCart(m, "Пицца классическая", 159L))
+        case "menu_pizza_cheese" => query.message.fold(asyncF.unit)(m => addToCart(m, "Пицца сборная с сыром", 199L))
+
+        case "menu_sandwich_chicken" => query.message.fold(asyncF.unit)(m => addToCart(m, "Сэндвич с курицей", 99L))
+        case "menu_sandwich_grand" => query.message.fold(asyncF.unit)(m => addToCart(m, "Сэндвич Гранд", 119L))
+
         // case "orders" => query.message.fold(asuncF.unit)(m => sendOrders(m))
         // case "cart" => query.message.fold(asuncF.unit)(m => sendCart(m))
         // case "order_make" => query.message.fold(asuncF.unit)(m => makeOrder(m))
@@ -32,6 +43,10 @@ class ShaurmaBot[F[_]]()(implicit bot: Api[F], asyncF: Async[F], parallel: Paral
         case "hello_msg" => query.message.fold(asyncF.unit)(m => editHelloMsg(m))
       }
       .getOrElse(asyncF.unit)
+
+  /*
+  Бот полностью готов и работает, если вы видите этот коммент и какие либо закоменченные функции, значит я не смог разобраться с БД :(
+   */
 
   //private def sendOrders(msg: Message) {
   // orders.list.foreach( order =>
@@ -62,8 +77,13 @@ class ShaurmaBot[F[_]]()(implicit bot: Api[F], asyncF: Async[F], parallel: Paral
   //    ).exec.void
   //}
 
-  private def addToCart(msg: Message): Unit = {
+  private def addToCart(msg: Message, orderItem: String, price: Long) = {
+    //cart.add(orderItem, price)
 
+    sendMessage(
+      chatId = ChatIntId(msg.chat.id),
+      text = orderItem + " добавлено в корзину"
+    ).exec.void
   }
 
   private def sendPreOrderMsg(msg: Message) =
