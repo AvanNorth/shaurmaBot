@@ -7,6 +7,10 @@ package object bot {
   val pizzaMenuString = "Вот какие пиццы у нас есть:"
   val sandwichMenuString = "Сэндвич! Отлично подходит для перекуса!"
 
+  def backToStartMarkup() = Some(InlineKeyboardMarkups.singleButton(backToStartBtn()))
+
+  def backToMenuMarkup() = Some(InlineKeyboardMarkups.singleButton(backToMenuBtn()))
+
   def backToMenuBtn() =
     InlineKeyboardButtons.callbackData("<- В меню", callbackData = "menu")
 
@@ -28,6 +32,7 @@ package object bot {
     Some(
       InlineKeyboardMarkups.singleRow(
         List(
+          backToStartBtn(),
           InlineKeyboardButtons.callbackData("Оформить заказ", callbackData = "order_make"),
           backToMenuBtn()
         )
